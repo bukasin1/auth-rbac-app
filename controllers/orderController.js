@@ -1,4 +1,4 @@
-const Order = require("../models/Order");
+const { Order, orderStatuses } = require("../models/Order");
 
 // Create a new order
 exports.createOrder = async (req, res) => {
@@ -22,6 +22,10 @@ exports.updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+
+    if (!orderStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid order status" });
+    }
 
     const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
     if (!order) return res.status(404).json({ message: "Order not found" });

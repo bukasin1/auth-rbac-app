@@ -1,16 +1,18 @@
 const mongoose = require("mongoose");
 
+const orderStatuses = ["Pending", "Dispatched", "In Transit", "Delivered"];
+
 const orderSchema = new mongoose.Schema(
   {
     customerName: { type: String, required: true },
     customerId: { type: String, required: true },
     status: {
       type: String,
-      enum: ["Pending", "Dispatched", "In Transit", "Delivered"],
-      default: "Pending",
+      enum: orderStatuses,
+      default: "Pending", // Default order status
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = { Order: mongoose.model("Order", orderSchema), orderStatuses };
