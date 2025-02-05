@@ -1,3 +1,4 @@
+const User = require('../models/User');
 const { verifyToken } = require('../utils/jwt');
 
 const authenticateToken = (req, res, next) => {
@@ -12,8 +13,10 @@ const authenticateToken = (req, res, next) => {
 };
 
 const authorizeRoles = (...roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+    return async (req, res, next) => {
+        const userExists = await User.findById(req.user.id);
+
+        if (!roles.includes(userExists?.role)) {
             return res.status(403).json({ message: 'Access forbidden: insufficient permissions' });
         }
         next();
