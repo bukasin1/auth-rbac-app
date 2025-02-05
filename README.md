@@ -28,7 +28,7 @@ npm run dev:up
 npm run db:reset
 ```
 
-## Running the app
+## Running the app server
 
 ```bash
 # development
@@ -39,4 +39,11 @@ npm run start:dev
 
 # production mode
 npm run start:prod
+```
+
+## Running the client
+
+```bash
+# this runs the client on a liveserver connection in order to establish a websocket connection to the server
+npx live-server .
 ```
