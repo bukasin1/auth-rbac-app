@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "start:dev": "node --watch app.js",
+    "start:prod": "node app.js",
     "dev:up": "docker compose -f docker-compose.dev.yml up -d",
     "dev:down": "docker compose -f docker-compose.dev.yml down",
-    "dev:stop": "docker compose -f docker-compose.dev.yml stop",
     "db:reset": "rm -rf data/db"
   },
   "keywords": [],
