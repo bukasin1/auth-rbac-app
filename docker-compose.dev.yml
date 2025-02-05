@@ -1,0 +1,34 @@
+# version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: rbac-mongo
+    restart: always
+    ports:
+      - "27017:27017"  # Expose port 27017 for MongoDB
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+      - MONGO_INITDB_DATABASE=rbacAuth_db
+    volumes:
+      - ./data/db:/data/db  # Persist data in the ./data/db directory
+
+
+
+
+# version: '3.8'
+
+# services:
+#   mongo:
+#     image: mongo
+#     container_name: rbac-mongo-test
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo-data:/data/db
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: root
+#       MONGO_INITDB_ROOT_PASSWORD: rootpassword
+# volumes:
+#   mongo-data:
