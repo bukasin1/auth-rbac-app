@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Real-Time Order Tracking</h1>
+      <div id="loggedIn">
+        <button id="logOut">log Out</button>
+
+        <div id="updates"></div>
+        <p id="role"></p>
+        <div id="allOrders">
+          <h3>All Orders</h3>
+          <button id="newOrder">Create New Order</button>
+          <button id="seeAllOrders">See my Orders</button>
+          <div id="orders"></div>
+        </div>
+      </div>
+
+      <div id="loggedOut">
+        <p>Log In</p>
+        <form action="" id="logIn-form">
+          <input type="text" placeholder="email" name="email" required />
+          <input type="text" placeholder="password" name="password" required />
+          <button>LogIn</button>
+          <i id="logIn-form-error"></i>
+        </form>
+
+        <p>Sign Up</p>
+        <form action="" id="signUp-form">
+          <input type="text" placeholder="name" name="name" />
+          <input type="text" placeholder="email" name="email" required />
+          <input type="text" placeholder="password" name="password" required />
+          <select name="role" id="signUpRole"></select>
+          <button>SignUp</button>
+          <i id="signUp-form-error"></i>
+        </form>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+  </body>
+</html>
