@@ -9,7 +9,7 @@ const { authorizeRoles } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.post("/", authorizeRoles("shipper", "admin", "carrier"), createOrder);
-router.patch("/:id", authorizeRoles("carrier", "admin"), updateOrderStatus);
+router.put("/:id", authorizeRoles("carrier", "admin"), updateOrderStatus);
 router.get("/", getUserOrders);
 router.get("/all", authorizeRoles("admin"), getOrders);
 
