@@ -11,6 +11,7 @@
     "start": "node app.js",
     "start:dev": "node --watch app.js",
     "start:prod": "node app.js",
+    "start:client": "CLIENT_PORT=8080 node --watch client/server.js",
     "dev:up": "docker compose -f docker-compose.dev.yml up -d",
     "dev:down": "docker compose -f docker-compose.dev.yml down",
     "db:reset": "rm -rf data/db"
