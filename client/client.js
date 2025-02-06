@@ -22,26 +22,29 @@ const computeSignupRoles = () => {
 };
 
 const isLoggedIn = async () => {
-  logInFormError.textContent = ''
-  signUpFormError.textContent = ''
+  logInFormError.textContent = "";
+  signUpFormError.textContent = "";
   const token = localStorage.getItem("authToken");
   if (!token) {
     loggedOutDiv.hidden = false;
     loggedInDiv.hidden = true;
-    computeSignupRoles()
+    computeSignupRoles();
+    return null;
   } else {
     const decodedToken = jwt_decode(token);
+    console.log("decoded...", decodedToken);
     role.textContent = decodedToken.role;
     if (decodedToken.role !== "admin") {
       adminAllOrders.hidden = true;
+      await displayOrders();
     } else {
       adminAllOrders.hidden = false;
+      await displayOrders(true);
     }
-    await displayOrders();
     loggedOutDiv.hidden = true;
     loggedInDiv.hidden = false;
+    return decodedToken;
   }
-  return token;
 };
 
 isLoggedIn();
@@ -144,7 +147,7 @@ signUpForm.addEventListener("submit", async (e) => {
       })
     ).json();
 
-    signUpFormError.textContent = res.message
+    signUpFormError.textContent = res.message;
     if (res.token) {
       localStorage.setItem("authToken", res.token);
       isLoggedIn();
@@ -170,7 +173,7 @@ logInForm.addEventListener("submit", async (e) => {
       })
     ).json();
 
-    logInFormError.textContent = res.message
+    logInFormError.textContent = res.message;
     if (res.token) {
       localStorage.setItem("authToken", res.token);
       isLoggedIn();
@@ -225,8 +228,9 @@ adminAllOrders.addEventListener("click", async (e) => {
 const socket = io(server);
 
 // Listen for new orders
-socket.on("order-created", (order) => {
-  if (!isLoggedIn()) return;
+socket.on("order-created", async (order) => {
+  const { id: userId, role } = (await isLoggedIn()) || {};
+  if (role !== "admin" && userId !== order.customerId) return;
   console.log("new order created...", order);
   displayMessage(
     `New order created: ${order.customerName} - Status: ${order.status}`
@@ -234,8 +238,9 @@ socket.on("order-created", (order) => {
 });
 
 // Listen for status updates
-socket.on("status-updated", (order) => {
-  if (!isLoggedIn()) return;
+socket.on("status-updated", async (order) => {
+  const { id: userId, role } = (await isLoggedIn()) || {};
+  if (role !== "admin" && userId !== order.customerId) return;
   console.log("order updated...", order, socket.id);
   displayMessage(
     `Order status updated: ${order.customerName} - New Status: ${order.status}`
