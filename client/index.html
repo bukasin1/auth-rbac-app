@@ -7,10 +7,30 @@
   </head>
   <body>
     <h1>Real-Time Order Tracking</h1>
+    <div id="loggedIn">
+      <button id="logOut">log Out</button>
 
-    <div id="updates"></div>
+      <div id="updates"></div>
+      <p id="role"></p>
+      <div id="allOrders">
+        <h3>All Orders</h3>
+        <button id="newOrder">Create New Order</button>
+        <button id="seeAllOrders">See all Orders</button>
+        <div id="orders"></div>
+      </div>
+    </div>
+
+    <div id="logIn">
+      <p>Log In</p>
+      <form action="" id="logIn-form">
+        <input type="text" placeholder="email" name="email" />
+        <input type="text" placeholder="password" name="password" />
+        <button>LogIn</button>
+      </form>
+    </div>
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script src="client.js"></script>
   </body>
 </html>
