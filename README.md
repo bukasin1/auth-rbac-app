@@ -7,6 +7,8 @@ Create a secure JWT-based authentication system with  role-based access control 
 ## Installation
 
 ```bash
+# Ensure node version running is 16 and above
+
 npm install
 ```
 
