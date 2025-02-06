@@ -32,7 +32,11 @@ const isLoggedIn = async () => {
     return null;
   } else {
     const decodedToken = jwt_decode(token);
-    console.log("decoded...", decodedToken);
+    if (Date.now() > decodedToken.exp * 1000) {
+      localStorage.removeItem("authToken");
+      isLoggedIn();
+      return;
+    }
     role.textContent = decodedToken.role;
     if (decodedToken.role !== "admin") {
       adminAllOrders.hidden = true;
@@ -203,7 +207,6 @@ newOrderBtn.addEventListener("click", async (e) => {
         },
       })
     ).json();
-
   } catch (err) {
     console.log("error occured...", err);
   }
