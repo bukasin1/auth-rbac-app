@@ -1,18 +1,34 @@
 const server = "http://localhost:3003";
 
 const loggedInDiv = document.getElementById("loggedIn");
-const logInDiv = document.getElementById("logIn");
-const logInFOrm = document.getElementById("logIn-form");
+const loggedOutDiv = document.getElementById("loggedOut");
+const logInForm = document.getElementById("logIn-form");
+const logInFormError = document.getElementById("logIn-form-error");
+const signUpForm = document.getElementById("signUp-form");
+const signUpRoleSelect = document.getElementById("signUpRole");
+const signUpFormError = document.getElementById("signUp-form-error");
 const logOutBtn = document.getElementById("logOut");
 const newOrderBtn = document.getElementById("newOrder");
 const role = document.getElementById("role");
 const adminAllOrders = document.getElementById("seeAllOrders");
 
+const computeSignupRoles = () => {
+  const userRoles = ["admin", "shipper", "carrier"];
+  userRoles.map((status) => {
+    const statusSelectOption = document.createElement("option");
+    statusSelectOption.textContent = status;
+    signUpRoleSelect.appendChild(statusSelectOption);
+  });
+};
+
 const isLoggedIn = async () => {
+  logInFormError.textContent = ''
+  signUpFormError.textContent = ''
   const token = localStorage.getItem("authToken");
   if (!token) {
-    logInDiv.hidden = false;
+    loggedOutDiv.hidden = false;
     loggedInDiv.hidden = true;
+    computeSignupRoles()
   } else {
     const decodedToken = jwt_decode(token);
     role.textContent = decodedToken.role;
@@ -22,7 +38,7 @@ const isLoggedIn = async () => {
       adminAllOrders.hidden = false;
     }
     await displayOrders();
-    logInDiv.hidden = true;
+    loggedOutDiv.hidden = true;
     loggedInDiv.hidden = false;
   }
   return token;
@@ -110,7 +126,35 @@ const updateOrderStatusForm = (order) => {
   return form;
 };
 
-logInFOrm.addEventListener("submit", async (e) => {
+signUpForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = e.target.elements.email.value;
+  const password = e.target.elements.password.value;
+  const role = e.target.elements.role.value;
+  const name = e.target.elements.name.value;
+
+  try {
+    const res = await (
+      await fetch(`${server}/auth/register`, {
+        method: "post",
+        body: JSON.stringify({ email, password, role, name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+
+    signUpFormError.textContent = res.message
+    if (res.token) {
+      localStorage.setItem("authToken", res.token);
+      isLoggedIn();
+    }
+  } catch (err) {
+    console.log("error occured...", err);
+  }
+});
+
+logInForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = e.target.elements.email.value;
   const password = e.target.elements.password.value;
@@ -126,6 +170,7 @@ logInFOrm.addEventListener("submit", async (e) => {
       })
     ).json();
 
+    logInFormError.textContent = res.message
     if (res.token) {
       localStorage.setItem("authToken", res.token);
       isLoggedIn();
@@ -155,6 +200,7 @@ newOrderBtn.addEventListener("click", async (e) => {
         },
       })
     ).json();
+
   } catch (err) {
     console.log("error occured...", err);
   }
